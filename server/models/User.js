@@ -30,15 +30,15 @@ const UserSchema = new Schema ({
         }
 
     },
+    role: {
+        type: String,
+        enum: ["admin","user"],
+    },
     resetPasswordToken: {
         type: String
     },
     resetPasswordExpire: {
         type: Date
-    },
-    admin: {
-        type: Boolean,
-        default: false
     }
 }, {
     timestamps: true
