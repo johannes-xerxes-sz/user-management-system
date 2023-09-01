@@ -3,8 +3,8 @@ import "./App.css";
 import { store } from "./app/store";
 import { Provider } from "react-redux";
 import { ApiProvider } from "@reduxjs/toolkit/dist/query/react";
-import { userApi } from "./features/apiSlice";
-// import { Data } from "./data/Data";
+import { api } from "./features/apiSlice";
+import { Data } from "./data/Data";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
 //? Components
@@ -22,7 +22,7 @@ const App: React.FC = () => {
   return (
      <Provider store={store}>
       <Navbar />
-      <ApiProvider api={userApi}>
+      <ApiProvider api={api}>
         <Router>
           <div className="App">
             <Routes>
@@ -31,6 +31,7 @@ const App: React.FC = () => {
               <Route path="/login" element={<Login />} />
               <Route path="/signup" element={<SignUp />} />
               <Route path="/forgot" element={<Forgot />} />
+              <Route path="/dashboard" element={<Data />} />
               {/* You can add more routes here */}
             </Routes>
             {/* <Data /> */}

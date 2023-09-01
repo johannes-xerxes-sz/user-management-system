@@ -1,8 +1,8 @@
 // import React from "react";
-import { useGetAllUsersQuery } from "../features/apiSlice";
 import AllUsers from "../components/body/user/AllUsers";
 import CssBaseline from "@mui/material/CssBaseline";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
+import { useGetAllUsersQuery } from "../features/apiSlice";
 
 const defaultTheme = createTheme();
 
