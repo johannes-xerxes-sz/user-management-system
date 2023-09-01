@@ -30,9 +30,18 @@ const UserSchema = new Schema ({
         }
 
     },
+    address: {
+        type: String,
+        maxlength: 150
+    },
+    age: {
+        type: Number,
+        maxlength: 3
+    },
     role: {
         type: String,
         enum: ["admin","user"],
+        default: "user"
     },
     resetPasswordToken: {
         type: String

@@ -54,21 +54,22 @@ const deleteUsers = async (req, res, next) => {
 
 const getUser = async (req, res, next) => {
     try {
-        const user = await User.findById(req.params.UserId);
+
+        const user = await User.findById(req.params.userId);
         res
         .status(200)
         .setHeader('Content-Type', 'application/json')
         .json(user)
     }
     catch (err) {
-        throw new Error(`Error retrieving User with User of: ${req.params.UserId} ${err.message}`);
+        throw new Error(`Error retrieving User with User of: ${req.params.userId} ${err.message}`);
     }
 }
 
 const updateUser = async (req, res, next) => {
 
     try {
-        const user = await User.findByIdAndUpdate(req.params.UserId, {
+        const user = await User.findByIdAndUpdate(req.params.userId, {
             $set: req.body
         }, { new: true}); 
         res
@@ -77,21 +78,21 @@ const updateUser = async (req, res, next) => {
         .json(user)
     }
     catch (err) {
-        throw new Error(`Error updating User with id of: ${req.params.UserId} ${err.message}`);
+        throw new Error(`Error updating User with id of: ${req.params.userId} ${err.message}`);
     }
 }
 
 const deleteUser = async (req, res, next) => {
     try {
-        await User.findByIdAndDelete(req.params.UserId);
+        await User.findByIdAndDelete(req.params.userId);
 
         res
         .status(200)
         .setHeader('Content-Type', 'application/json')
-        .json( { success: true, msg: `delete User with id: ${req.params.UserId}`})
+        .json( { success: true, msg: `delete User with id: ${req.params.userId}`})
     }
     catch (err) {
-        throw new Error(`Error deleting User with id of: ${req.params.UserId} ${err.message}`);
+        throw new Error(`Error deleting User with id of: ${req.params.userId} ${err.message}`);
 
     }
 

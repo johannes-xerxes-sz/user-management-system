@@ -8,6 +8,7 @@ import { Box } from "@mui/material";
 
 const Footer: React.FC = () => {
   return (
+    <div style={{ textAlign: "center", padding: "50px" }}>
     <Box
       component="footer"
       sx={{
@@ -74,6 +75,7 @@ const Footer: React.FC = () => {
         </Box>
       </Container>
     </Box>
+    </div>
   );
 };
 

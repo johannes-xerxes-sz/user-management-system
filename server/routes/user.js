@@ -25,7 +25,7 @@ router
   .route("/")
   .get(reqReceivedLogger, getUsers)
   .post(reqReceivedLogger, userValidator, createUser)
-  .delete(reqReceivedLogger, protectedRoute, deleteUsers);
+  .delete(reqReceivedLogger, deleteUsers);
 
 router.route("/login").post(reqReceivedLogger, login);
 
@@ -35,14 +35,14 @@ router.route("/resetpassword").put(reqReceivedLogger, resetPassword);
 
 router
   .route("/updatepassword")
-  .put(reqReceivedLogger, protectedRoute, updatePassword);
+  .put(reqReceivedLogger, updatePassword);
 
-router.route("/logout").get(reqReceivedLogger, protectedRoute, logout);
+router.route("/logout").get(reqReceivedLogger, logout);
 
 router
   .route("/:userId")
   .get(reqReceivedLogger, getUser)
-  .put(reqReceivedLogger, protectedRoute, updateUser)
-  .delete(reqReceivedLogger, protectedRoute, deleteUser);
+  .put(reqReceivedLogger, updateUser)
+  .delete(reqReceivedLogger, deleteUser);
 
 module.exports = router;
