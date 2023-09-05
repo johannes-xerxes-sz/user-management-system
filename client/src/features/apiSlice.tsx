@@ -2,7 +2,7 @@ import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
 export const api = createApi({
   reducerPath: "api",
-  baseQuery: fetchBaseQuery({ baseUrl: "http://localhost:5001/api/v1/" }),
+  baseQuery: fetchBaseQuery({ baseUrl: import.meta.env.VITE_APP_URL}),
   endpoints: (builder) => ({
     getAllUsers: builder.query<string, void>({
       query: () => "user",
@@ -13,6 +13,13 @@ export const api = createApi({
     createUser: builder.mutation<string, Partial<string>>({
       query: (body) => ({
         url: "/user",
+        method: "POST",
+        body,
+      }),
+    }),
+    login: builder.mutation<string, Partial<object>>({
+      query: (body) => ({
+        url: "user/login",
         method: "POST",
         body,
       }),
@@ -42,6 +49,7 @@ export const api = createApi({
 export const {
   useGetAllUsersQuery,
   useCreateUserMutation,
+  useLoginMutation,
   useDeleteAllUsersQuery,
   useGetUserQuery,
   useEditUserMutation,

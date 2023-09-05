@@ -100,7 +100,7 @@ const deleteUser = async (req, res, next) => {
 // for '/login' endpoint
 const login = async (req, res, next) => {
     const {email, password} = req.body;
-
+    console.log(req.body)
     if (!email || !password) throw new Error('Please provide an email and password');
     
     // find a user by email and return with password

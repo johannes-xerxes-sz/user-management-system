@@ -18,6 +18,10 @@ import SignUp from "./pages/signup/SignUp";
 import Error from "./pages/error/Error";
 import Forgot from "./pages/forgot/Forgot"
 
+
+// console.log('current component: ', bodyContainer)
+// localStorage.removeItem("token");
+
 const App: React.FC = () => {
   return (
      <Provider store={store}>

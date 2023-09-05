@@ -7,21 +7,42 @@ import Checkbox from "@mui/material/Checkbox";
 import Link from "@mui/material/Link";
 import Paper from "@mui/material/Paper";
 import LoginIcon from "@mui/icons-material/Login";
-import Avatar from '@mui/material/Avatar';
+import Avatar from "@mui/material/Avatar";
 import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
 import Typography from "@mui/material/Typography";
 import { Container } from "@mui/material";
+import { useLoginMutation } from "../../features/apiSlice";
 
 const Login: React.FC = () => {
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+  const [login] = useLoginMutation();
+
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    const data = new FormData(event.currentTarget);
-    console.log({
-      email: data.get("email"),
-      password: data.get("password"),
-    });
+    const formData = new FormData(event.currentTarget);
+    const email = formData.get("email")
+    const password = formData.get("password")
+  
+    if (email && password) {
+      try {
+        const loginData = {
+          email: email,
+          password: password
+        };
+  
+        const loginResponse = await login(loginData);
+  
+        // Handle the login response here, e.g., store tokens in Redux store or local storage
+        console.log("Login response:", loginResponse);
+      } catch (error) {
+        // Handle any unexpected errors that occur during the login process
+        console.error("An error occurred during login:", error);
+      }
+    } else {
+      console.error("Email or password is missing.");
+    }
   };
+  
 
   return (
     <Container component="main" maxWidth="lg">

@@ -10,7 +10,7 @@ export const Data = () => {
   const { data: allUsersData, isLoading } = useGetAllUsersQuery();
 
   if (isLoading) return <h1>Loading...</h1>;
-  // @ts-ignore
+
   return (
     <ThemeProvider theme={defaultTheme}>
       <CssBaseline />
