@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import Button from "@mui/material/Button";
 import CssBaseline from "@mui/material/CssBaseline";
 import TextField from "@mui/material/TextField";
@@ -13,29 +13,33 @@ import Grid from "@mui/material/Grid";
 import Typography from "@mui/material/Typography";
 import { Container } from "@mui/material";
 import { useLoginMutation } from "../../features/apiSlice";
+import { useNavigate } from "react-router-dom";
+import { useAppDispatch } from "../../app/hooks";
+import { setUser } from "../../features/auth/authSlice";
 
 const Login: React.FC = () => {
-  const [login] = useLoginMutation();
+  const navigate = useNavigate();
+  const dispatch = useAppDispatch();
+  const [
+    login,
+    {
+      data: loginData,
+      isSuccess: isLoginSuccess,
+      // isError: isLoginError,
+      // error: loginError,
+    },
+  ] = useLoginMutation();
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const formData = new FormData(event.currentTarget);
-    const email = formData.get("email")
-    const password = formData.get("password")
-  
+    const email = String(formData.get("email"));
+    const password = String(formData.get("password"));
+
     if (email && password) {
       try {
-        const loginData = {
-          email: email,
-          password: password
-        };
-  
-        const loginResponse = await login(loginData);
-  
-        // Handle the login response here, e.g., store tokens in Redux store or local storage
-        console.log("Login response:", loginResponse);
+        await login({ email, password });
       } catch (error) {
-        // Handle any unexpected errors that occur during the login process
         console.error("An error occurred during login:", error);
       }
     } else {
@@ -43,6 +47,15 @@ const Login: React.FC = () => {
     }
   };
   
+  useEffect(() => {
+    if (isLoginSuccess) {
+      console.log("user login successfully");
+      dispatch(setUser({ name: loginData.name, token: loginData.token }));
+      console.log(loginData.token)
+      navigate("/login");
+      console.log(localStorage)
+    }
+  }, [isLoginSuccess]);
 
   return (
     <Container component="main" maxWidth="lg">

@@ -17,8 +17,8 @@ export const api = createApi({
         body,
       }),
     }),
-    login: builder.mutation<string, Partial<object>>({
-      query: (body) => ({
+    login: builder.mutation({
+      query: (body: { email: string; password: string }) => ({
         url: "user/login",
         method: "POST",
         body,
