@@ -1,4 +1,10 @@
-import React from "react";
+import React, { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import { useLoginMutation } from "../../features/apiSlice";
+import { useAppDispatch } from "../../app/hooks";
+import { setUser } from "../../features/authSlice";
+import { toast } from "react-toastify";
+
 import Button from "@mui/material/Button";
 import CssBaseline from "@mui/material/CssBaseline";
 import TextField from "@mui/material/TextField";
@@ -12,37 +18,42 @@ import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
 import Typography from "@mui/material/Typography";
 import { Container } from "@mui/material";
-import { useLoginMutation } from "../../features/apiSlice";
 
 const Login: React.FC = () => {
-  const [login] = useLoginMutation();
+  const [login, { data: loginData, isSuccess: isLoginSuccess }] =
+    useLoginMutation();
+  const dispatch = useAppDispatch();
+  const navigate = useNavigate();
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const formData = new FormData(event.currentTarget);
-    const email = formData.get("email")
-    const password = formData.get("password")
-  
+    const email = String(formData.get("email"));
+    const password = String(formData.get("password"));
+
     if (email && password) {
       try {
-        const loginData = {
-          email: email,
-          password: password
-        };
-  
-        const loginResponse = await login(loginData);
-  
-        // Handle the login response here, e.g., store tokens in Redux store or local storage
-        console.log("Login response:", loginResponse);
+        await login({ email, password });
       } catch (error) {
-        // Handle any unexpected errors that occur during the login process
         console.error("An error occurred during login:", error);
       }
     } else {
       console.error("Email or password is missing.");
     }
   };
-  
+
+  useEffect(() => {
+    if (isLoginSuccess) {
+      console.log(loginData);
+      navigate("/login");
+      try {
+        dispatch(setUser({ name: loginData.name, token: loginData.token })); //TODO FIX LOGIN DATA SET USER BECAUSE IT'S NOT SENDING
+        console.log("ni agi");
+      } catch {
+        console.error("Email or password is missing.");
+      }
+    }
+  }, [isLoginSuccess]);
 
   return (
     <Container component="main" maxWidth="lg">

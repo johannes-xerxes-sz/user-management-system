@@ -6,6 +6,7 @@ import { ApiProvider } from "@reduxjs/toolkit/dist/query/react";
 import { api } from "./features/apiSlice";
 import { Data } from "./data/Data";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { ToastContainer } from "react-toastify";
 
 //? Components
 import Landing from "./pages/Landing";
@@ -16,15 +17,15 @@ import Footer from "./components/footer/Footer";
 import Login from "./pages/login/Login";
 import SignUp from "./pages/signup/SignUp";
 import Error from "./pages/error/Error";
-import Forgot from "./pages/forgot/Forgot"
-
+import Forgot from "./pages/forgot/Forgot";
 
 // console.log('current component: ', bodyContainer)
 // localStorage.removeItem("token");
 
 const App: React.FC = () => {
   return (
-     <Provider store={store}>
+    <Provider store={store}>
+      <ToastContainer autoClose={8000} />
       <Navbar />
       <ApiProvider api={api}>
         <Router>
