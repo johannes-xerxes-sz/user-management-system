@@ -51,6 +51,38 @@ const BasicModal: React.FC<BasicModalProps> = ({ onClose, open, user }) => {
                   autoFocus
                 />
               </Grid>
+              <Grid item xs={12} sm={6}>
+                <TextField
+                  autoComplete="given-name"
+                  // name="firstName"
+                  required
+                  fullWidth
+                  id="firstName"
+                  label="First Name"
+                  autoFocus
+                  placeholder="first name"
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <TextField
+                  required
+                  fullWidth
+                  id="email"
+                  label="Email Address"
+                  autoComplete="email"
+                  placeholder="email.com"
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <TextField
+                  required
+                  fullWidth
+                  label="Password"
+                  type="password"
+                  id="password"
+                  placeholder="email.com"
+                />
+              </Grid>
             </Grid>
           </Typography>
         </Box>

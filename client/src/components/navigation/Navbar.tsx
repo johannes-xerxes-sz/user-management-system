@@ -15,11 +15,12 @@ import {
 } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
 import SupervisedUserCircleIcon from '@mui/icons-material/SupervisedUserCircle';
+const hasToken = localStorage.getItem("token");
 
 const pages = [
-  { label: "Home", path: "/" },
+  { label: hasToken ? "Dashboard" : "Home", path: hasToken ? "/dashboard" : "/" }, // Change "Home" to "Dashboard" conditionally
   // { label: "Sign Up", path: "/signup" },
-  { label: "Login", path: "/login" },
+  { label: hasToken ? "Dashboard" : "Login", path: hasToken ? "/dashboard" : "/login" }, // Change "Login" to "Dashboard" conditionally
 ];
 const settings: string[] = ["Profile", "Account", "Dashboard", "Logout"];
 

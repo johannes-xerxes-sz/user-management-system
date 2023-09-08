@@ -2,13 +2,13 @@ import * as React from "react";
 import AllUsers from "../components/body/user/AllUsers";
 import AddUser from "../components/popUp/AddUser";
 import CssBaseline from "@mui/material/CssBaseline";
-import { createTheme, ThemeProvider } from "@mui/material/styles";
+// import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { useGetAllUsersQuery } from "../features/apiSlice";
 import Box from "@mui/material/Box";
 
 import Button from "@mui/material/Button";
 
-const defaultTheme = createTheme();
+// const defaultTheme = createTheme();
 
 export const Data = () => {
   const { data: allUsersData, isLoading } = useGetAllUsersQuery();
@@ -32,11 +32,11 @@ export const Data = () => {
         </Button>
       </Box>
       <AddUser handleClose={handleClose} open={open} />
-      <ThemeProvider theme={defaultTheme}>
+      {/* <ThemeProvider theme={defaultTheme}> */}
         <CssBaseline />
         {/* @ts-ignore */}
         <AllUsers allUsersData={allUsersData ?? undefined} />
-      </ThemeProvider>
+      {/* </ThemeProvider> */}
     </div>
   );
 };

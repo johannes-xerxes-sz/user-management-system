@@ -7,8 +7,6 @@ import Modal from "@mui/material/Modal";
 import { TextField } from "@mui/material";
 import Grid from "@mui/material/Grid";
 import Button from "@mui/material/Button";
-import FormControlLabel from "@mui/material/FormControlLabel";
-import Checkbox from "@mui/material/Checkbox";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
@@ -124,14 +122,6 @@ const BasicModal: React.FC<BasicModalProps> = ({ handleClose, open }) => {
                 />
 
                 {errors.password && <span>This field is required</span>}
-              </Grid>
-              <Grid item xs={12}>
-                <FormControlLabel
-                  control={
-                    <Checkbox value="allowExtraEmails" color="primary" />
-                  }
-                  label="This user will receive inspiration, marketing promotions and updates via email."
-                />
               </Grid>
             </Grid>
             <Button
