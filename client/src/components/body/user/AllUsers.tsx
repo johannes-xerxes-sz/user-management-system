@@ -1,8 +1,11 @@
-import React from "react";
+import React, { useState } from "react";
 import { DataGrid, GridRowsProp, GridColDef } from "@mui/x-data-grid";
 import IconButton from "@mui/material/IconButton";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
+
+import EditUser from "../../../components/popUp/EditUser";
+import DeleteUser from "../../../components/popUp/DeleteUser";
 
 interface User {
   _id: string;
@@ -18,6 +21,11 @@ interface AllUsersProps {
 }
 
 const AllUsers: React.FC<AllUsersProps> = ({ allUsersData }) => {
+
+  const [editModalOpen, setEditModalOpen] = useState(false);
+  const [deleteModalOpen, setDeleteModalOpen] = useState(false);
+  const [selectedUserId, setSelectedUserId] = useState({});
+
   const columns: GridColDef[] = [
     { field: "firstName", headerName: "First Name", minWidth: 150, flex: 1 },
     { field: "lastName", headerName: "Last Name", minWidth: 150, flex: 1 },
@@ -33,13 +41,13 @@ const AllUsers: React.FC<AllUsersProps> = ({ allUsersData }) => {
         <>
           <IconButton
             aria-label="Edit"
-            onClick={() => handleEdit(params.id as string)}
+            onClick={() => handleEdit(params as object)}
           >
             <EditIcon />
           </IconButton>
           <IconButton
             aria-label="Delete"
-            onClick={() => handleDelete(params.id as string)}
+            onClick={() => handleDelete(params as object)}
           >
             <DeleteIcon />
           </IconButton>
@@ -57,19 +65,40 @@ const AllUsers: React.FC<AllUsersProps> = ({ allUsersData }) => {
     role: user.role,
   }));
 
-  // @ts-ignore
-  const handleEdit = (userId: string) => {
-    // Handle edit logic here
+  const handleEdit = (user: object) => {
+    setSelectedUserId(user);
+    setEditModalOpen(true);
   };
-  
-  // @ts-ignore
-  const handleDelete = (userId: string) => {
-    // Handle delete logic here
+
+  const handleDelete = (user: object) => {
+    setSelectedUserId(user);
+    setDeleteModalOpen(true);
+  };
+
+  const handleEditModalClose = () => {
+    setEditModalOpen(false);
+  };
+
+  const handleDeleteModalClose = () => {
+    setDeleteModalOpen(false);
   };
 
   return (
     <div style={{ height: 700 }}>
       <DataGrid rows={rows} columns={columns} />
+      {/* Edit User Modal */}
+      <EditUser
+        open={editModalOpen}
+        onClose={handleEditModalClose}
+        user={selectedUserId}
+      />
+
+      {/* Delete User Modal */}
+      <DeleteUser
+        open={deleteModalOpen}
+        onClose={handleDeleteModalClose}
+        user={selectedUserId}
+      />
     </div>
   );
 };

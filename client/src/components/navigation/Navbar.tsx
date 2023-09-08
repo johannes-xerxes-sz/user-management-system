@@ -18,7 +18,7 @@ import SupervisedUserCircleIcon from '@mui/icons-material/SupervisedUserCircle';
 
 const pages = [
   { label: "Home", path: "/" },
-  { label: "Sign Up", path: "/signup" },
+  // { label: "Sign Up", path: "/signup" },
   { label: "Login", path: "/login" },
 ];
 const settings: string[] = ["Profile", "Account", "Dashboard", "Logout"];

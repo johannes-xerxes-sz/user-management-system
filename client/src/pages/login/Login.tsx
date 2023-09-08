@@ -1,8 +1,8 @@
 import React, { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useLoginMutation } from "../../features/apiSlice";
-import { useAppDispatch } from "../../app/hooks";
-import { setUser } from "../../features/authSlice";
+// import { useAppDispatch } from "../../app/hooks";
+// import { setUser } from "../../features/authSlice";
 import { toast } from "react-toastify";
 
 import Button from "@mui/material/Button";
@@ -20,9 +20,16 @@ import Typography from "@mui/material/Typography";
 import { Container } from "@mui/material";
 
 const Login: React.FC = () => {
-  const [login, { data: loginData, isSuccess: isLoginSuccess }] =
-    useLoginMutation();
-  const dispatch = useAppDispatch();
+  const [
+    login,
+    {
+      data: loginData,
+      isSuccess: isLoginSuccess,
+      isError: isLoginError,
+      error: loginError,
+    },
+  ] = useLoginMutation();
+  // const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
@@ -33,24 +40,27 @@ const Login: React.FC = () => {
 
     if (email && password) {
       try {
+        console.log('hello 1')
         await login({ email, password });
-      } catch (error) {
-        console.error("An error occurred during login:", error);
+      } catch (error: any) {
+        toast.error(`Error: ${error.message}`); 
       }
     } else {
-      console.error("Email or password is missing.");
+      toast.error("Error: Please provide both email and password");
+      console.log('hello 2')
     }
   };
 
   useEffect(() => {
     if (isLoginSuccess) {
       console.log(loginData);
-      navigate("/login");
       try {
-        dispatch(setUser({ name: loginData.name, token: loginData.token })); //TODO FIX LOGIN DATA SET USER BECAUSE IT'S NOT SENDING
-        console.log("ni agi");
+        // @ts-ignore
+        localStorage.setItem("token", loginData.token);
+        toast.success(`Successfully login`);
+        navigate("/dashboard");
       } catch {
-        console.error("Email or password is missing.");
+        toast.error("Error has occured");
       }
     }
   }, [isLoginSuccess]);
@@ -148,11 +158,11 @@ const Login: React.FC = () => {
                       Forgot password?
                     </Link>
                   </Grid>
-                  <Grid item>
+                  {/* <Grid item>
                     <Link href="/signup" variant="body2">
                       {"Don't have an account? Sign Up"}
                     </Link>
-                  </Grid>
+                  </Grid> */}
                 </Grid>
               </Box>
             </Box>

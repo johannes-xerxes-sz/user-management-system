@@ -1,42 +1,35 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { RootState } from "../app/store";
-import { api } from "./apiSlice";
 
 export interface AuthState {
   name: string | null;
   token: string | null;
-  currentUser: string | null;
 }
 
 const initialState: AuthState = {
   name: null,
   token: null,
-  currentUser: null,
 };
 
 export const authSlice = createSlice({
   name: "auth",
   initialState,
   reducers: {
-    setUser: (
+    setUser: ( 
       state,
       action: PayloadAction<{ name: string; token: string }>
     ) => {
-      const { name, token } = action.payload;
-      console.log("User name:", name);
-      localStorage.setItem("user", JSON.stringify({ name, token }));
-      return { ...state, name, token }; // Create and return a new state object
+      console.log("User name:", action.payload.name);
+      localStorage.setItem(
+        "user",
+        JSON.stringify({
+          name: action.payload.name,
+          token: action.payload.token,
+        })
+      );
+      state.name = action.payload.name;
+      state.token = action.payload.token;
     },
-  },
-  extraReducers: (builder) => {
-    builder.addMatcher(
-      api.endpoints.login.matchFulfilled,
-      (state, action) => {
-        console.log(action.payload, "action.payload");
-        sessionStorage.setItem("user", JSON.stringify(action.payload));
-        state.currentUser = action.payload;
-      }
-    );
   },
 });
 

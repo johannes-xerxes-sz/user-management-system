@@ -15,7 +15,7 @@ import Footer from "./components/footer/Footer";
 
 //? Pages
 import Login from "./pages/login/Login";
-import SignUp from "./pages/signup/SignUp";
+// import SignUp from "./pages/signup/SignUp";
 import Error from "./pages/error/Error";
 import Forgot from "./pages/forgot/Forgot";
 
@@ -25,7 +25,18 @@ import Forgot from "./pages/forgot/Forgot";
 const App: React.FC = () => {
   return (
     <Provider store={store}>
-      <ToastContainer autoClose={8000} />
+      <ToastContainer
+        position="bottom-right"
+        autoClose={2500}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss={false}
+        draggable
+        pauseOnHover
+        theme="colored"
+      />
       <Navbar />
       <ApiProvider api={api}>
         <Router>
@@ -34,7 +45,7 @@ const App: React.FC = () => {
               <Route path="*" element={<Error />} />
               <Route path="/" element={<Landing />} />
               <Route path="/login" element={<Login />} />
-              <Route path="/signup" element={<SignUp />} />
+              {/* <Route path="/signup" element={<SignUp />} /> */}
               <Route path="/forgot" element={<Forgot />} />
               <Route path="/dashboard" element={<Data />} />
               {/* You can add more routes here */}

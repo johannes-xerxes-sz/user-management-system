@@ -1,26 +1,14 @@
 import * as React from "react";
 import AllUsers from "../components/body/user/AllUsers";
+import AddUser from "../components/popUp/AddUser";
 import CssBaseline from "@mui/material/CssBaseline";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { useGetAllUsersQuery } from "../features/apiSlice";
-
 import Box from "@mui/material/Box";
+
 import Button from "@mui/material/Button";
-import Typography from "@mui/material/Typography";
-import Modal from "@mui/material/Modal";
 
 const defaultTheme = createTheme();
-const style = {
-  position: "absolute" as "absolute",
-  top: '50%',
-  left: '50%',
-  transform: "translate(-50%, -50%)",
-  width: 400,
-  bgcolor: "background.paper",
-  border: "2px solid #000",
-  boxShadow: 24,
-  p: 4,
-};
 
 export const Data = () => {
   const { data: allUsersData, isLoading } = useGetAllUsersQuery();
@@ -32,22 +20,18 @@ export const Data = () => {
 
   return (
     <div>
-      <Button onClick={handleOpen}>Open modal</Button>
-      <Modal
-        open={open}
-        onClose={handleClose}
-        aria-labelledby="modal-modal-title"
-        aria-describedby="modal-modal-description"
+      <Box
+        m={1}
+        //margin
+        display="flex"
+        justifyContent="flex-end"
+        alignItems="flex-end"
       >
-        <Box sx={style}>
-          <Typography id="modal-modal-title" variant="h6" component="h2">
-            Text in a modal
-          </Typography>
-          <Typography id="modal-modal-description" sx={{ mt: 2 }}>
-            Duis mollis, est non commodo luctus, nisi erat porttitor ligula.
-          </Typography>
-        </Box>
-      </Modal>
+        <Button variant="contained" color="primary" onClick={handleOpen}>
+          Add new user
+        </Button>
+      </Box>
+      <AddUser handleClose={handleClose} open={open} />
       <ThemeProvider theme={defaultTheme}>
         <CssBaseline />
         {/* @ts-ignore */}
