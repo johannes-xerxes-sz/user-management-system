@@ -7,7 +7,7 @@ import { useGetAllUsersQuery } from "../features/apiSlice";
 import Box from "@mui/material/Box";
 import CircularProgress from '@mui/material/CircularProgress';
 import Button from "@mui/material/Button";
-
+import AddIcon from '@mui/icons-material/Add';
 // const defaultTheme = createTheme();
 
 export const Data = () => {
@@ -27,8 +27,8 @@ export const Data = () => {
         alignItems="flex-end" 
         // height="12vh"
       >
-        <Button variant="contained" color="primary" onClick={handleOpen}>
-          Add new user
+        <Button variant="contained" color="secondary" onClick={handleOpen}>
+          <AddIcon /> user
         </Button>
       <AddUser handleClose={handleClose} open={open} />
       </Box>

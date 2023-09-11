@@ -36,6 +36,7 @@ function ResponsiveAppBar() {
 
   const handleLogout = () => {
     localStorage.removeItem("token");
+    localStorage.removeItem("role");
     setHasToken(false);
     toast.success(`Successfully logout`);
     setAnchorElUser(null);
@@ -156,7 +157,7 @@ function ResponsiveAppBar() {
                 <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
                   <Avatar
                     alt="Remy Sharp"
-                    src="https://mui.com/static/images/avatar/1.jpg"
+                    // src="https://mui.com/static/images/avatar/1.jpg"
                   />
                 </IconButton>
               </Tooltip>

@@ -24,6 +24,16 @@ export const api = createApi({
         body,
       }),
     }),
+    logout: builder.query<string, void>({
+      query: () => `user/logout`,
+    }),
+    forgotPassword: builder.mutation<string, Partial<string>>({
+      query: (body) => ({
+        url: "/user/forgotpassword",
+        method: "POST",
+        body,
+      }),
+    }),
     editUser: builder.mutation<string, { user: number; body: Partial<string> }>({
       query: ({ user, body }) => ({
         url: `/users/${user}`,

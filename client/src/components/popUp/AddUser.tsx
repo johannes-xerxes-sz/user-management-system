@@ -21,6 +21,7 @@ interface SignUpForm {
   lastName: string;
   email: string;
   password: string;
+  address: string;
   allowExtraEmails: boolean;
 }
 
@@ -55,6 +56,14 @@ const BasicModal: React.FC<BasicModalProps> = ({ handleClose, open }) => {
     }
   };
 
+  const normalInputStyle = {
+    borderColor: "inherit", // Default border color
+  };
+
+  const errorInputStyle = {
+    borderColor: "red", // Red border for errors
+  };
+
   return (
     <div>
       <Modal
@@ -77,16 +86,19 @@ const BasicModal: React.FC<BasicModalProps> = ({ handleClose, open }) => {
               <Grid item xs={12} sm={6}>
                 <TextField
                   autoComplete="given-name"
-                  // name="firstName"
                   required
                   fullWidth
                   id="firstName"
                   label="First Name"
                   autoFocus
                   {...register("firstName", { required: true })}
+                  style={errors.firstName ? errorInputStyle : normalInputStyle}
                 />
-                {errors.firstName && <span>This field is required</span>}
+                {errors.firstName && (
+                  <span style={{ color: "red" }}>This field is required</span>
+                )}
               </Grid>
+
               <Grid item xs={12} sm={6}>
                 <TextField
                   required
@@ -95,9 +107,11 @@ const BasicModal: React.FC<BasicModalProps> = ({ handleClose, open }) => {
                   label="Last Name"
                   autoFocus
                   {...register("lastName", { required: true })}
-                  autoComplete="family-name"
+                  style={errors.lastName ? errorInputStyle : normalInputStyle}
                 />
-                {errors.lastName && <span>This field is required</span>}
+                {errors.firstName && (
+                  <span style={{ color: "red" }}>This field is required</span>
+                )}
               </Grid>
               <Grid item xs={12}>
                 <TextField
@@ -105,10 +119,12 @@ const BasicModal: React.FC<BasicModalProps> = ({ handleClose, open }) => {
                   fullWidth
                   id="email"
                   label="Email Address"
-                  {...register("email", { required: true })}
-                  autoComplete="email"
+                  {...register("email", { required: true,  pattern: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i })}
+                  style={errors.email ? errorInputStyle : normalInputStyle}
                 />
-                {errors.email && <span>This field is required</span>}
+                {errors.email && (
+                  <span style={{ color: "red" }}>Invalid Email</span>
+                )}{" "}
               </Grid>
               <Grid item xs={12}>
                 <TextField
@@ -118,10 +134,25 @@ const BasicModal: React.FC<BasicModalProps> = ({ handleClose, open }) => {
                   type="password"
                   id="password"
                   {...register("password", { required: true })}
-                  autoComplete="new-password"
+                  style={errors.password ? errorInputStyle : normalInputStyle}
                 />
-
-                {errors.password && <span>This field is required</span>}
+                {errors.password && (
+                  <span style={{ color: "red" }}>This field is required</span>
+                )}{" "}
+              </Grid>
+              <Grid item xs={12}>
+                <TextField
+                  required
+                  fullWidth
+                  label="Address"
+                  type="address"
+                  id="address"
+                  {...register("address", { required: true })}
+                  style={errors.address ? errorInputStyle : normalInputStyle}
+                />
+                {errors.address && (
+                  <span style={{ color: "red" }}>This field is required</span>
+                )}{" "}
               </Grid>
             </Grid>
             <Button
