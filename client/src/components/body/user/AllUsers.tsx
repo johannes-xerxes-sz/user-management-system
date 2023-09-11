@@ -3,9 +3,9 @@ import { DataGrid, GridRowsProp, GridColDef } from "@mui/x-data-grid";
 import IconButton from "@mui/material/IconButton";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
-
-import EditUser from "../../../components/popUp/EditUser";
-import DeleteUser from "../../../components/popUp/DeleteUser";
+import { Box } from "@mui/material";
+import EditDel from "../../popUp/EditDel";
+import "./AllUsers.css";
 
 interface User {
   _id: string;
@@ -21,13 +21,20 @@ interface AllUsersProps {
 }
 
 const AllUsers: React.FC<AllUsersProps> = ({ allUsersData }) => {
-
   const [editModalOpen, setEditModalOpen] = useState(false);
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
   const [selectedUserId, setSelectedUserId] = useState({});
+  const [operationType, setOperationType] = useState<"edit" | "delete">("edit"); // Default to "edit"
 
   const columns: GridColDef[] = [
-    { field: "firstName", headerName: "First Name", minWidth: 150, flex: 1 },
+    {
+      field: "firstName",
+      headerName: "First Name",
+      minWidth: 150,
+      headerClassName: "user-table-header",
+      cellClassName: "user-table-cell",
+      flex: 1,
+    },
     { field: "lastName", headerName: "Last Name", minWidth: 150, flex: 1 },
     { field: "email", headerName: "Email", minWidth: 200, flex: 1 },
     { field: "address", headerName: "Address", minWidth: 300, flex: 1 },
@@ -67,11 +74,13 @@ const AllUsers: React.FC<AllUsersProps> = ({ allUsersData }) => {
 
   const handleEdit = (user: object) => {
     setSelectedUserId(user);
+    setOperationType("edit");
     setEditModalOpen(true);
   };
 
   const handleDelete = (user: object) => {
     setSelectedUserId(user);
+    setOperationType("delete");
     setDeleteModalOpen(true);
   };
 
@@ -84,21 +93,25 @@ const AllUsers: React.FC<AllUsersProps> = ({ allUsersData }) => {
   };
 
   return (
-    <div style={{ height: 700 }}>
-      <DataGrid rows={rows} columns={columns} />
-      {/* Edit User Modal */}
-      <EditUser
-        open={editModalOpen}
-        onClose={handleEditModalClose}
-        user={selectedUserId}
-      />
+    <div style={{ height: 500 }}>
+      <Box>
+        <DataGrid rows={rows} columns={columns} className="custom-datagrid" />
+        {/* Edit User Modal */}
+        <EditDel
+          open={editModalOpen}
+          onClose={handleEditModalClose}
+          user={selectedUserId}
+          operationType={operationType}
+        />
 
-      {/* Delete User Modal */}
-      <DeleteUser
-        open={deleteModalOpen}
-        onClose={handleDeleteModalClose}
-        user={selectedUserId}
-      />
+        {/* Delete User Modal */}
+        <EditDel
+          open={deleteModalOpen}
+          onClose={handleDeleteModalClose}
+          user={selectedUserId}
+          operationType={operationType}
+        />
+      </Box>
     </div>
   );
 };

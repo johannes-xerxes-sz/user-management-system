@@ -186,7 +186,8 @@ const logout = async (req, res, next) => {
 const sendTokenResponse = (user, statusCode, res) => {
     //generate toekn to send back to the user!
     const token = user.getSignedJwtToken();
-    const name = user.firstName + ' ' + user.lastName
+    const name = user.firstName + ' ' + user.lastName;
+    const role = user.role;
     const options = {
         // set expiration for cookie to be ~2 hours
         expires: new Date(Date.now() + process.env.JWT_COOKIE_EXPIRE * 24 * 60 * 60 * 1000),
@@ -198,7 +199,7 @@ const sendTokenResponse = (user, statusCode, res) => {
     res
     .status(statusCode)
     .cookie('token', token, options)
-    .json({ success: true, token, name})
+    .json({ success: true, token, name, role})
 }
 
 module.exports = {

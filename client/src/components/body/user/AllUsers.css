@@ -1,0 +1,51 @@
+/* Custom CSS for the DataGrid */
+.custom-datagrid {
+  /* Modify these styles to match your desired modern look */
+  border: 1px solid #e0e0e0;
+  background-color: #f9f9f9;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+}
+
+/* Custom CSS for the DataGrid cell headers */
+.MuiDataGrid-root .MuiDataGrid-colCell {
+  /* Modify these styles to match your desired header style */
+  background-color: #333;
+  color: white;
+  font-weight: bold;
+  border-bottom: 2px solid #222;
+}
+
+/* Custom CSS for the DataGrid cells */
+.MuiDataGrid-root .MuiDataGrid-cell {
+  /* Modify these styles to match your desired cell style */
+  background-color: #fff;
+  color: #333;
+  border-bottom: 1px solid #e0e0e0;
+  padding: 8px;
+}
+
+/* Custom CSS for the DataGrid cell when hovered */
+.MuiDataGrid-root .MuiDataGrid-row:hover .MuiDataGrid-cell {
+  /* Modify these styles to match your desired hover effect */
+  background-color: #f2f2f2;
+}
+
+/* Define the custom styles for the DataGrid */
+.custom-datagrid {
+  height: 500px;
+}
+
+/* Apply different styles for smaller screen widths */
+@media (max-width: 768px) {
+  .custom-datagrid {
+    height: 300px; /* Adjust the height for smaller screens */
+  }
+}
+
+/* Apply different styles for even smaller screen widths */
+@media (max-width: 576px) {
+  .custom-datagrid {
+    height: 200px; /* Adjust the height for even smaller screens */
+  }
+}

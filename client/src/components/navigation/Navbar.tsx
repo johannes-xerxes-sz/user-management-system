@@ -1,32 +1,22 @@
-import { useState, MouseEvent } from "react";
-import {
-  AppBar,
-  Box,
-  Toolbar,
-  IconButton,
-  Typography,
-  Menu,
-  MenuItem,
-  Container,
-  Avatar,
-  Button,
-  Tooltip,
-  Link,
-} from "@mui/material";
+import { useState, MouseEvent, useEffect } from "react";
+import { AppBar, Box, Toolbar, IconButton, Typography, Menu, MenuItem, Container, Avatar, Button, Tooltip, Link } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
-import SupervisedUserCircleIcon from '@mui/icons-material/SupervisedUserCircle';
+import SupervisedUserCircleIcon from "@mui/icons-material/SupervisedUserCircle";
+import { toast } from "react-toastify";
+
 const hasToken = localStorage.getItem("token");
 
 const pages = [
-  { label: hasToken ? "Dashboard" : "Home", path: hasToken ? "/dashboard" : "/" }, // Change "Home" to "Dashboard" conditionally
-  // { label: "Sign Up", path: "/signup" },
-  { label: hasToken ? "Dashboard" : "Login", path: hasToken ? "/dashboard" : "/login" }, // Change "Login" to "Dashboard" conditionally
+  { label: hasToken ? "Dashboard" : "Home", path: hasToken ? "/" : "/" },
+  { label: hasToken ? "" : "Login", path: hasToken ? "/" : "/login" },
 ];
-const settings: string[] = ["Profile", "Account", "Dashboard", "Logout"];
+
+const settings: string[] = ["Dashboard", "Logout"];
 
 function ResponsiveAppBar() {
   const [anchorElNav, setAnchorElNav] = useState<null | HTMLElement>(null);
   const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null);
+  const [hasToken, setHasToken] = useState<boolean>(!!localStorage.getItem("token"));
 
   const handleOpenNavMenu = (event: MouseEvent<HTMLElement>) => {
     setAnchorElNav(event.currentTarget);
@@ -44,11 +34,27 @@ function ResponsiveAppBar() {
     setAnchorElUser(null);
   };
 
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    setHasToken(false);
+    toast.success(`Successfully logout`);
+    setAnchorElUser(null);
+    window.location.reload();
+  };
+
+  useEffect(() => {
+    // Check for the presence of a token when the component mounts
+    const token = localStorage.getItem("token");
+    setHasToken(!!token);
+  }, []);
+
   return (
-    <AppBar position="static">
+    <AppBar position="absolute">
       <Container maxWidth="xl">
         <Toolbar disableGutters>
-          <SupervisedUserCircleIcon sx={{ display: { xs: "none", md: "flex" }, mr: 1 }} />
+          <SupervisedUserCircleIcon
+            sx={{ display: { xs: "none", md: "flex" }, mr: 1 }}
+          />
           <Typography
             variant="h6"
             noWrap
@@ -68,16 +74,18 @@ function ResponsiveAppBar() {
           </Typography>
 
           <Box sx={{ flexGrow: 1, display: { xs: "flex", md: "none" } }}>
-            <IconButton
-              size="large"
-              aria-label="account of current user"
-              aria-controls="menu-appbar"
-              aria-haspopup="true"
-              onClick={handleOpenNavMenu}
-              color="inherit"
-            >
-              <MenuIcon />
-            </IconButton>
+            {hasToken && (
+              <IconButton
+                size="large"
+                aria-label="account of current user"
+                aria-controls="menu-appbar"
+                aria-haspopup="true"
+                onClick={handleOpenNavMenu}
+                color="inherit"
+              >
+                <MenuIcon />
+              </IconButton>
+            )}
             <Menu
               id="menu-appbar"
               anchorEl={anchorElNav}
@@ -107,7 +115,9 @@ function ResponsiveAppBar() {
               ))}
             </Menu>
           </Box>
-          <SupervisedUserCircleIcon sx={{ display: { xs: "flex", md: "none" }, mr: 1 }} />
+          <SupervisedUserCircleIcon
+            sx={{ display: { xs: "flex", md: "none" }, mr: 1 }}
+          />
           <Typography
             variant="h5"
             noWrap
@@ -124,7 +134,7 @@ function ResponsiveAppBar() {
               textDecoration: "none",
             }}
           >
-            LOGO
+            UMS
           </Typography>
           <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
             {pages.map((page) => (
@@ -141,11 +151,16 @@ function ResponsiveAppBar() {
           </Box>
 
           <Box sx={{ flexGrow: 0 }}>
-            <Tooltip title="Open settings">
-              <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                <Avatar alt="Remy Sharp" src="https://mui.com/static/images/avatar/1.jpg" />
-              </IconButton>
-            </Tooltip>
+            {hasToken && (
+              <Tooltip title="Open settings">
+                <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
+                  <Avatar
+                    alt="Remy Sharp"
+                    src="https://mui.com/static/images/avatar/1.jpg"
+                  />
+                </IconButton>
+              </Tooltip>
+            )}
             <Menu
               sx={{ mt: "45px" }}
               id="menu-appbar"
@@ -163,7 +178,12 @@ function ResponsiveAppBar() {
               onClose={handleCloseUserMenu}
             >
               {settings.map((setting) => (
-                <MenuItem key={setting} onClick={handleCloseUserMenu}>
+                <MenuItem
+                  key={setting}
+                  onClick={
+                    setting === "Logout" ? handleLogout : handleCloseUserMenu
+                  }
+                >
                   <Typography textAlign="center">{setting}</Typography>
                 </MenuItem>
               ))}
