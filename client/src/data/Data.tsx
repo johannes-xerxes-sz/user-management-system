@@ -2,13 +2,11 @@ import * as React from "react";
 import AllUsers from "../components/body/user/AllUsers";
 import AddUser from "../components/popUp/AddUser";
 import CssBaseline from "@mui/material/CssBaseline";
-// import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { useGetAllUsersQuery } from "../features/apiSlice";
 import Box from "@mui/material/Box";
 import CircularProgress from '@mui/material/CircularProgress';
 import Button from "@mui/material/Button";
 import AddIcon from '@mui/icons-material/Add';
-// const defaultTheme = createTheme();
 
 export const Data = () => {
   const { data: allUsersData, isLoading } = useGetAllUsersQuery();
@@ -24,20 +22,16 @@ export const Data = () => {
         m={1}
         display="flex"
         justifyContent="flex-end" 
-        alignItems="flex-end" 
-        // height="12vh"
+        alignItems="flex-end"
       >
         <Button variant="contained" color="secondary" onClick={handleOpen}>
           <AddIcon /> user
         </Button>
-      <AddUser handleClose={handleClose} open={open} />
+        <AddUser handleClose={handleClose} open={open} />
       </Box>
-      <Box >
-      {/* <ThemeProvider theme={defaultTheme}> */}
-      <CssBaseline />
-      {/* @ts-ignore */}
-      <AllUsers allUsersData={allUsersData ?? undefined} />
-      {/* </ThemeProvider> */}
+      <Box>
+        <CssBaseline />
+        <AllUsers allUsersData={allUsersData ?? undefined} />
       </Box>
     </div>
   );

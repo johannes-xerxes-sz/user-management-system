@@ -93,7 +93,15 @@ const AllUsers: React.FC<AllUsersProps> = ({ allUsersData }) => {
   return (
     <div style={{ height: 500 }}>
       <Box>
-        <DataGrid rows={rows} columns={columns} className="custom-datagrid" />
+        <DataGrid
+          rows={rows}
+          columns={columns}
+          className="custom-datagrid"
+          initialState={{
+            pagination: { paginationModel: { pageSize: 7 } },
+          }}
+          pageSizeOptions={[7, 14, 21]}
+        />
         {/* Edit User Modal */}
         <EditDel
           open={editModalOpen}

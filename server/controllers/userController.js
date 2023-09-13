@@ -21,12 +21,13 @@ const getUsers = async (req, res, next) => {
 const createUser = async (req, res, next) => {
     try {
         const user = await User.create(req.body);
+        // sendTokenResponse(user, 201, res)
 
-        sendTokenResponse(user, 201, res)
-/*         res
+        res
         .status(201)
         .setHeader('Content-Type', 'application/json')
-        .json(user) */
+        .json({ success: true, user})
+
     }
     catch (err) {
         throw new Error(`Error postings users: ${err.message}`);
@@ -41,7 +42,7 @@ const deleteUsers = async (req, res, next) => {
         res
         .status(200)
         .setHeader('Content-Type', 'application/json')
-        .json( { success: true, msg: 'delete all User'})
+        .json({ success: true, msg: 'delete all User'})
     }
     catch (err) {
         throw new Error(`Error retrieving users: ${err.message}`);

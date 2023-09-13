@@ -9,6 +9,7 @@ import Grid from "@mui/material/Grid";
 import Button from "@mui/material/Button";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { useCreateUserMutation } from "../../features/apiSlice";
 
 // Define the prop types for your component
 interface BasicModalProps {
@@ -22,7 +23,6 @@ interface SignUpForm {
   email: string;
   password: string;
   address: string;
-  allowExtraEmails: boolean;
 }
 
 const style = {
@@ -38,6 +38,8 @@ const style = {
 };
 
 const BasicModal: React.FC<BasicModalProps> = ({ handleClose, open }) => {
+  const [createUser, {isSuccess: createUserSuccess}] = useCreateUserMutation(); // Destructure the mutateAsync function
+
   const {
     register,
     handleSubmit,
@@ -45,12 +47,17 @@ const BasicModal: React.FC<BasicModalProps> = ({ handleClose, open }) => {
     formState: { errors },
   } = useForm<SignUpForm>();
 
-  const onSubmit: SubmitHandler<SignUpForm> = (data) => {
-    console.log(data);
+  const onSubmit: SubmitHandler<SignUpForm> = async (register) => {
+    console.log(register);
+
     try {
-      reset();
-      toast.success(`User ${data.firstName} ${data.lastName} has been added`);
-      handleClose();
+      console.log(register);
+      await createUser(register);
+      if (createUserSuccess) {
+        reset();
+        toast.success(`User ${register.firstName} ${register.lastName} has been added`);
+        handleClose();
+      }
     } catch {
       toast.error("Error has occured");
     }
@@ -119,7 +126,10 @@ const BasicModal: React.FC<BasicModalProps> = ({ handleClose, open }) => {
                   fullWidth
                   id="email"
                   label="Email Address"
-                  {...register("email", { required: true,  pattern: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i })}
+                  {...register("email", {
+                    required: true,
+                    pattern: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i,
+                  })}
                   style={errors.email ? errorInputStyle : normalInputStyle}
                 />
                 {errors.email && (

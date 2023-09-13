@@ -2,7 +2,7 @@ import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
 export const api = createApi({
   reducerPath: "api",
-  baseQuery: fetchBaseQuery({ baseUrl: import.meta.env.VITE_APP_URL}),
+  baseQuery: fetchBaseQuery({ baseUrl: import.meta.env.VITE_APP_URL }),
   endpoints: (builder) => ({
     getAllUsers: builder.query<string, void>({
       query: () => "user",
@@ -10,7 +10,7 @@ export const api = createApi({
     getUser: builder.query<string, string>({
       query: (user) => `user/${user}`,
     }),
-    createUser: builder.mutation<string, Partial<string>>({
+    createUser: builder.mutation<string, Partial<object>>({
       query: (body) => ({
         url: "/user",
         method: "POST",
@@ -34,18 +34,21 @@ export const api = createApi({
         body,
       }),
     }),
-    editUser: builder.mutation<string, { user: number; body: Partial<string> }>({
-      query: ({ user, body }) => ({
-        url: `/users/${user}`,
-        method: 'PUT',
-        body,
-      }),
-    }),
-    deleteUser: builder.query<void, { user: string }>({
+    editUser: builder.mutation<string, { user: string; body: Partial<object> }>(
+      {
+        query: ({ user, body }) => ({
+          url: `/user/${user}`,
+          method: "PUT",
+          body,
+        }),
+      }
+    ),
+    deleteUser: builder.mutation<void, { user: string }>({
       query: ({ user }) => ({
         url: `/user/${user}`,
-        method: "PUT",
+        method: "DELETE",
       }),
+      // invalidatesTags: (result, error, arg) => [{ type: "Delete", id: user.id }],
     }),
     deleteAllUsers: builder.query<void, void>({
       query: () => ({
@@ -63,5 +66,5 @@ export const {
   useDeleteAllUsersQuery,
   useGetUserQuery,
   useEditUserMutation,
-  useDeleteUserQuery,
+  useDeleteUserMutation,
 } = api;

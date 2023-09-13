@@ -5,9 +5,14 @@ import { Provider } from "react-redux";
 import { ApiProvider } from "@reduxjs/toolkit/dist/query/react";
 import { api } from "./features/apiSlice";
 import { ToastContainer } from "react-toastify";
-import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  Navigate,
+} from "react-router-dom";
 import { Box } from "@mui/material";
-import CircularProgress from '@mui/material/CircularProgress';
+import CircularProgress from "@mui/material/CircularProgress";
 import { Data } from "./data/Data";
 import Landing from "./pages/Landing";
 import Navbar from "./components/navigation/Navbar";
@@ -57,30 +62,32 @@ const App: React.FC = () => {
           <Box mt={7}>
             <Navbar />
           </Box>
-          <ApiProvider api={api}>
-            <Router>
-              <Routes>
-                <Route path="*" element={<Error />} />
-                <Route path="/login" element={<Login />} />
-                <Route path="/forgot" element={<Forgot />} />
-                {hasToken ? (
-                  <>
-                    {userRole === "admin" && (
-                      <Route path="/" element={<Data />} />
-                    )}
-                    {userRole === "user" && (
-                      <Route path="/" element={<LandingUser />} />
-                    )}
-                  </>
-                ) : (
-                  <Route path="/" element={<Landing />} />
-                )}
-                {/* Add a default route for unmatched routes */}
-                <Route path="/*" element={<Navigate to="/" />} />
-              </Routes>
-            </Router>
-          </ApiProvider>
-          <Box mt={5}>
+          <Box>
+            <ApiProvider api={api}>
+              <Router>
+                <Routes>
+                  <Route path="*" element={<Error />} />
+                  <Route path="/login" element={<Login />} />
+                  <Route path="/forgot" element={<Forgot />} />
+                  {hasToken ? (
+                    <>
+                      {userRole === "admin" && (
+                        <Route path="/" element={<Data />} />
+                      )}
+                      {userRole === "user" && (
+                        <Route path="/" element={<LandingUser />} />
+                      )}
+                    </>
+                  ) : (
+                    <Route path="/" element={<Landing />} />
+                  )}
+                  {/* Add a default route for unmatched routes */}
+                  <Route path="/*" element={<Navigate to="/" />} />
+                </Routes>
+              </Router>
+            </ApiProvider>
+          </Box>
+          <Box>
             <Footer />
           </Box>
         </>

@@ -1,6 +1,9 @@
-// @ts-nocheck
 import React, { useState, useEffect } from "react";
 import { toast } from "react-toastify";
+import {
+  useDeleteUserMutation,
+  useEditUserMutation,
+} from "../../features/apiSlice";
 // Define the prop types for your component
 
 import Box from "@mui/material/Box";
@@ -15,7 +18,7 @@ import DeleteIcon from "@mui/icons-material/Delete";
 interface BasicModalProps {
   onClose: () => void;
   open: boolean;
-  user: object; // Add this line to include the user prop
+  user: { row: { id: number } } | object; // Allow user to be an object with a row property
   operationType: "edit" | "delete";
 }
 
@@ -45,22 +48,36 @@ const BasicModal: React.FC<BasicModalProps> = ({
     address: "",
   });
 
-  const [isLoading, setIsLoading] = useState(false);
+  const [deleteUser, { isSuccess: deleteUserSuccess }] =
+    useDeleteUserMutation();
+  const [editUser, { isSuccess: createUserSuccess }] = useEditUserMutation();
 
-  const handleConfirm = () => {
-    setIsLoading(true); // Start loading indicator
+  const userId = (user as { row: { id: string } }).row?.id;
 
+  console.log(userId);
+  const handleConfirm = async () => {
     if (operationType === "edit") {
-      toast.success(`User has been edited`);
+      try {
+        console.log(formData)
+        console.log(userId)
+        await editUser({ body: formData, user: userId });
+        toast.success(`User has been edited`);
+      } catch {
+        toast.error(`An error has occurred`);
+      }
     } else if (operationType === "delete") {
-      // Handle delete logic here
-      toast.success(`User has been deleted`);
+      try {
+        await deleteUser({ user: userId });
+        toast.success(`User has been deleted`);
+      } catch {
+        toast.error(`An error has occurred`);
+      }
     } else {
       toast.error(`An error has occurred`);
     }
     onClose();
   };
-  
+
   useEffect(() => {
     if (operationType === "edit" && user && user.row) {
       const { firstName, lastName, email, address } = user.row;
