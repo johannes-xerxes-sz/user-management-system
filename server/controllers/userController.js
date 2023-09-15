@@ -60,7 +60,7 @@ const getUser = async (req, res, next) => {
         res
         .status(200)
         .setHeader('Content-Type', 'application/json')
-        .json(user)
+        .json({user, success: true, msg: 'get all User'})
     }
     catch (err) {
         throw new Error(`Error retrieving User with User of: ${req.params.userId} ${err.message}`);
@@ -73,10 +73,11 @@ const updateUser = async (req, res, next) => {
         const user = await User.findByIdAndUpdate(req.params.userId, {
             $set: req.body
         }, { new: true}); 
+        console.log(user)
         res
         .status(200)
         .setHeader('Content-Type', 'application/json')
-        .json(user)
+        .json({ user, success: true, msg: 'updated user'})
     }
     catch (err) {
         throw new Error(`Error updating User with id of: ${req.params.userId} ${err.message}`);
@@ -90,7 +91,7 @@ const deleteUser = async (req, res, next) => {
         res
         .status(200)
         .setHeader('Content-Type', 'application/json')
-        .json( { success: true, msg: `delete User with id: ${req.params.userId}`})
+        .json({User, success: true, msg: `delete User with id: ${req.params.userId}`})
     }
     catch (err) {
         throw new Error(`Error deleting User with id of: ${req.params.userId} ${err.message}`);
@@ -98,21 +99,29 @@ const deleteUser = async (req, res, next) => {
     }
 
 }
+
 // for '/login' endpoint
 const login = async (req, res, next) => {
     const {email, password} = req.body;
     console.log(req.body)
-    if (!email || !password) throw new Error('Please provide an email and password');
+    if (!email || !password) {
+        return res.status(400).json({ success: false, message: 'Please provide an email and password' });
+    }
     
     // find a user by email and return with password
     const user = await User.findOne({ email }).select('+password');
 
     // check to see if a user is returned
-    if (!user) throw new Error('Invalid credentials')
+    if (!user) 
+    {
+        return res.status(401).json({ success: false, message: 'Invalid credentials' });
+    }
 
     // check if password matches - if password not match then it will be error
     const isMatch = await user.matchPassword(password);
-    if (!isMatch) throw new Error ('Invalid credentials');
+    if (!isMatch) {
+        return res.status(401).json({ success: false, message: 'Invalid credentials' });
+    }
 
     sendTokenResponse(user, 200, res);
 

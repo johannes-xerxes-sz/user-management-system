@@ -21,6 +21,7 @@ import Login from "./pages/login/Login";
 import Error from "./pages/error/Error";
 import Forgot from "./pages/forgot/Forgot";
 import LandingUser from "./pages/user/LandingUser";
+// import ToggleDarkModeButton from "./components/ToggleDarkModeButton";
 
 const App: React.FC = () => {
   const [hasToken, setHasToken] = useState(false);
@@ -45,7 +46,7 @@ const App: React.FC = () => {
     <Provider store={store}>
       <ToastContainer
         position="bottom-right"
-        autoClose={2500}
+        autoClose={5000}
         hideProgressBar={false}
         newestOnTop={false}
         closeOnClick
@@ -56,10 +57,17 @@ const App: React.FC = () => {
         theme="colored"
       />
       {isLoading ? (
-        <CircularProgress />
+        <Box
+          display="flex"
+          justifyContent="center"
+          alignItems="center"
+          minHeight="100vh"
+        >
+          <CircularProgress />
+        </Box>
       ) : (
-        <>
-          <Box mt={7}>
+        <Box className="container">
+          <Box mt={12}>
             <Navbar />
           </Box>
           <Box>
@@ -87,10 +95,11 @@ const App: React.FC = () => {
               </Router>
             </ApiProvider>
           </Box>
-          <Box>
+          {/* <ToggleDarkModeButton /> */}
+          <Box mt={5} >
             <Footer />
           </Box>
-        </>
+        </Box>
       )}
     </Provider>
   );

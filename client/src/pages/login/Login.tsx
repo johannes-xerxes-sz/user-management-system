@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useLoginMutation } from "../../features/apiSlice";
 // import { useAppDispatch } from "../../app/hooks";
@@ -18,6 +18,10 @@ import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
 import Typography from "@mui/material/Typography";
 import { Container } from "@mui/material";
+import Visibility from "@mui/icons-material/Visibility";
+import VisibilityOff from "@mui/icons-material/VisibilityOff";
+import InputAdornment from "@mui/material/InputAdornment";
+import IconButton from "@mui/material/IconButton"
 
 const Login: React.FC = () => {
   const [
@@ -31,6 +35,10 @@ const Login: React.FC = () => {
   ] = useLoginMutation();
   // const dispatch = useAppDispatch();
   const navigate = useNavigate();
+
+  const [showPassword, setShowPassword] = useState(false);
+
+  const handleClickShowPassword = () => setShowPassword((show) => !show);
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -46,10 +54,10 @@ const Login: React.FC = () => {
         toast.error(`Error: ${error.message}`); 
       }
     } else {
-      toast.error("Error: Please provide both email and password");
-      console.log('hello 2')
+      toast.error("Login failed! Please provide both email and password");
     }
   };
+  console.log(isLoginError)
 
   useEffect(() => {
     if (isLoginSuccess) {
@@ -65,7 +73,15 @@ const Login: React.FC = () => {
         toast.error("Error has occured");
       }
     }
-  }, [isLoginSuccess]);
+
+    if (isLoginError) {
+      try {
+        toast.error("Login failed! Please check your email and password");
+      } catch {
+        toast.error("Error has occured");
+      }
+    }
+  }, [isLoginSuccess, isLoginError]);
 
   return (
     <Container component="main" maxWidth="lg">
@@ -138,9 +154,21 @@ const Login: React.FC = () => {
                   fullWidth
                   name="password"
                   label="Password"
-                  type="password"
+                  type={showPassword ? "text" : "password"}
                   id="password"
                   autoComplete="current-password"
+                  InputProps={{
+                    endAdornment: (
+                      <InputAdornment position="end">
+                        <IconButton
+                          aria-label="toggle password visibility"
+                          onClick={handleClickShowPassword}
+                        >
+                          {showPassword ? <VisibilityOff /> : <Visibility />} {/* Use the icons */}
+                        </IconButton>
+                      </InputAdornment>
+                    ),
+                  }}
                 />
                 <FormControlLabel
                   control={<Checkbox value="remember" color="primary" />}

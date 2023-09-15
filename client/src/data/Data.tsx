@@ -25,11 +25,11 @@ export const Data = () => {
         alignItems="flex-end"
       >
         <Button variant="contained" color="secondary" onClick={handleOpen}>
-          <AddIcon /> user
+          <AddIcon /> add user
         </Button>
         <AddUser handleClose={handleClose} open={open} />
       </Box>
-      <Box>
+      <Box padding={3}>
         <CssBaseline />
         <AllUsers allUsersData={allUsersData ?? undefined} />
       </Box>

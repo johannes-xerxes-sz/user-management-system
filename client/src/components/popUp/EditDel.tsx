@@ -9,7 +9,7 @@ import {
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Modal from "@mui/material/Modal";
-import { TextField, CircularProgress } from "@mui/material";
+import { TextField, InputLabel, Select } from "@mui/material"; // Import InputLabel and Select
 import Grid from "@mui/material/Grid";
 import Button from "@mui/material/Button";
 import EditIcon from "@mui/icons-material/Edit";
@@ -18,7 +18,18 @@ import DeleteIcon from "@mui/icons-material/Delete";
 interface BasicModalProps {
   onClose: () => void;
   open: boolean;
-  user: { row: { id: number } } | object; // Allow user to be an object with a row property
+  user:
+    | {
+        row: {
+          id: string;
+          role: string;
+          firstName: string;
+          lastName: string;
+          email: string;
+          address: string;
+        };
+      }
+    | object; // Update the type definition
   operationType: "edit" | "delete";
 }
 
@@ -44,13 +55,13 @@ const BasicModal: React.FC<BasicModalProps> = ({
     firstName: "",
     lastName: "",
     email: "",
-    password: "",
     address: "",
+    role: "user", // Set a default role (e.g., "user")
   });
 
   const [deleteUser, { isSuccess: deleteUserSuccess }] =
     useDeleteUserMutation();
-  const [editUser, { isSuccess: createUserSuccess }] = useEditUserMutation();
+  const [editUser, { isSuccess: editUserSuccess }] = useEditUserMutation();
 
   const userId = (user as { row: { id: string } }).row?.id;
 
@@ -58,17 +69,21 @@ const BasicModal: React.FC<BasicModalProps> = ({
   const handleConfirm = async () => {
     if (operationType === "edit") {
       try {
-        console.log(formData)
-        console.log(userId)
-        await editUser({ body: formData, user: userId });
-        toast.success(`User has been edited`);
+        console.log(formData);
+        console.log(userId);
+        await editUser({ user: userId, body: formData }); // Include the user ID in the request
+        // if (editUserSuccess) {
+        //   toast.success(`User has been edited`);
+        // }
       } catch {
         toast.error(`An error has occurred`);
       }
     } else if (operationType === "delete") {
       try {
         await deleteUser({ user: userId });
-        toast.success(`User has been deleted`);
+        // if (deleteUserSuccess) {
+        //   toast.success(`User has been deleted`);
+        // }
       } catch {
         toast.error(`An error has occurred`);
       }
@@ -79,9 +94,27 @@ const BasicModal: React.FC<BasicModalProps> = ({
   };
 
   useEffect(() => {
-    if (operationType === "edit" && user && user.row) {
-      const { firstName, lastName, email, address } = user.row;
-      setFormData({ firstName, lastName, email, address, password: "" });
+    if (editUserSuccess) {
+      try {
+        toast.success(`Great news! Your changes for ${formData.firstName} ${formData.lastName} have been saved successfully.`);
+      } catch {
+        toast.error(`Oops! It seems there was an issue while trying to edit ${formData.firstName} ${formData.lastName}. Please check your information and try again.`);
+      }
+    }
+    if (deleteUserSuccess) {
+      try {
+        toast.success(`Success! The user has been deleted.`);
+      } catch {
+        toast.error(`Oops! Something went wrong while trying to delete the user. Please try again later.`);
+      }
+    }
+  }, [deleteUserSuccess, editUserSuccess]);
+
+
+  useEffect(() => {
+    if (operationType === "edit" && user && "row" in user) {
+      const { firstName, lastName, email, address, role } = user.row;
+      setFormData({ firstName, lastName, email, address, role});
     }
   }, [operationType, user]);
 
@@ -143,15 +176,19 @@ const BasicModal: React.FC<BasicModalProps> = ({
                     }
                   />
                 </Grid>
-                <Grid item xs={12}>
+                {/* <Grid item xs={12}>
                   <TextField
                     required
                     fullWidth
                     label="Password"
                     type="password"
                     id="password"
+                    value={formData.password} // Set the value from state
+                    onChange={(e) =>
+                      setFormData({ ...formData, password: e.target.value })
+                    } // Update the state on change
                   />
-                </Grid>
+                </Grid> */}
                 <Grid item xs={12}>
                   <TextField
                     required
@@ -164,6 +201,21 @@ const BasicModal: React.FC<BasicModalProps> = ({
                       setFormData({ ...formData, address: e.target.value })
                     }
                   />
+                </Grid>
+                <Grid item xs={12}>
+                  <InputLabel htmlFor="role">Role</InputLabel>
+                  <Select
+                    native
+                    fullWidth
+                    id="role"
+                    value={formData.role}
+                    onChange={(e) =>
+                      setFormData({ ...formData, role: e.target.value })
+                    }
+                  >
+                    <option value="user">User</option>
+                    <option value="admin">Admin</option>
+                  </Select>
                 </Grid>
                 <Button
                   onClick={handleConfirm}

@@ -53,16 +53,17 @@ const UserSchema = new Schema ({
     timestamps: true
 })
 
-//bcrypt = prehook to hash our password before saving to the database!
-UserSchema.pre('save', async function(next) {
-    //first check if password is not modified
-    if (!this.isModified('password')) // when you login the password is not change
+UserSchema.pre("save", async function (next) {
+    const user = this;
+  
+    // Hash the password if it has been modified
+    if (user.isModified("password")) {
+      const salt = await bcrypt.genSalt(10);
+      user.password = await bcrypt.hash(user.password, salt);
+    }
+  
     next();
-
-    //when it make hash it complicated the data, shorter the number the lower complexity
-    const salt = await bcrypt.genSalt(10);
-    this.password = await bcrypt.hash(this.password, salt) //reset your password, create new password, update current password
-}) 
+  });
 
 // generate our jwt token when user logs in or create new account!
 UserSchema.methods.getSignedJwtToken = function() { //_id is ID in mongoDB

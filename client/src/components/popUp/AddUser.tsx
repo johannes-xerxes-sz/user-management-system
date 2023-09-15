@@ -1,10 +1,10 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
 
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Modal from "@mui/material/Modal";
-import { TextField } from "@mui/material";
+import { TextField, InputLabel, Select } from "@mui/material"; // Import InputLabel and Select
 import Grid from "@mui/material/Grid";
 import Button from "@mui/material/Button";
 import { toast } from "react-toastify";
@@ -23,6 +23,7 @@ interface SignUpForm {
   email: string;
   password: string;
   address: string;
+  role: string;
 }
 
 const style = {
@@ -38,7 +39,9 @@ const style = {
 };
 
 const BasicModal: React.FC<BasicModalProps> = ({ handleClose, open }) => {
-  const [createUser, {isSuccess: createUserSuccess}] = useCreateUserMutation(); // Destructure the mutateAsync function
+  const [createUser, { isSuccess: createUserSuccess }] =
+    useCreateUserMutation(); // Destructure the mutateAsync function
+  const [selectedRole, setSelectedRole] = useState("user"); // Default role is "user"
 
   const {
     register,
@@ -47,21 +50,28 @@ const BasicModal: React.FC<BasicModalProps> = ({ handleClose, open }) => {
     formState: { errors },
   } = useForm<SignUpForm>();
 
-  const onSubmit: SubmitHandler<SignUpForm> = async (register) => {
-    console.log(register);
-
+  const onSubmit: SubmitHandler<SignUpForm> = async (data) => {
     try {
-      console.log(register);
-      await createUser(register);
-      if (createUserSuccess) {
-        reset();
-        toast.success(`User ${register.firstName} ${register.lastName} has been added`);
-        handleClose();
-      }
+      const userData = { ...data, role: selectedRole };
+      await createUser(userData);
+      reset();
+      handleClose();
     } catch {
-      toast.error("Error has occured");
+      toast.error("Error has occurred");
     }
   };
+
+  useEffect(() => {
+    if (createUserSuccess) {
+      try {
+        toast.success(`Success! The user has been added.`);
+        reset();
+        handleClose();
+      } catch {
+        toast.error("Error has occured");
+      }
+    }
+  }, [createUserSuccess]);
 
   const normalInputStyle = {
     borderColor: "inherit", // Default border color
@@ -163,6 +173,24 @@ const BasicModal: React.FC<BasicModalProps> = ({ handleClose, open }) => {
                 {errors.address && (
                   <span style={{ color: "red" }}>This field is required</span>
                 )}{" "}
+              </Grid>
+              <Grid item xs={12}>
+                <InputLabel htmlFor="role">Role</InputLabel>
+                <Select
+                  native
+                  fullWidth
+                  id="role"
+                  {...register("role", { required: true })}
+                  style={errors.role ? errorInputStyle : normalInputStyle}
+                  value={selectedRole}
+                  onChange={(e) => setSelectedRole(e.target.value)}
+                >
+                  <option value="user">User</option>
+                  <option value="admin">Admin</option>
+                </Select>
+                {errors.role && (
+                  <span style={{ color: "red" }}>Please select a role</span>
+                )}
               </Grid>
             </Grid>
             <Button

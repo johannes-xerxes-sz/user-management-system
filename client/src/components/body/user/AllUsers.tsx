@@ -97,6 +97,8 @@ const AllUsers: React.FC<AllUsersProps> = ({ allUsersData }) => {
           rows={rows}
           columns={columns}
           className="custom-datagrid"
+          autoHeight // Enable auto-height
+          pagination // Enable pagination
           initialState={{
             pagination: { paginationModel: { pageSize: 7 } },
           }}
