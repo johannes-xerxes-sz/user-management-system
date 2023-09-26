@@ -67,7 +67,6 @@ const Login: React.FC = () => {
         localStorage.setItem("token", loginData.token);
         localStorage.setItem("role", loginData.role);
         toast.success(`Successfully login`);
-        navigate("/");
         window.location.reload();
       } catch {
         toast.error("Error has occured");

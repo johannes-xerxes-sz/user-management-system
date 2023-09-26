@@ -75,8 +75,14 @@ const App: React.FC = () => {
               <Router>
                 <Routes>
                   <Route path="*" element={<Error />} />
-                  <Route path="/login" element={<Login />} />
-                  <Route path="/forgot" element={<Forgot />} />
+                  <Route
+                    path="/login"
+                    element={hasToken ? <Navigate to="/" /> : <Login />}
+                  />
+                  <Route
+                    path="/forgot"
+                    element={hasToken ? <Navigate to="/" /> : <Forgot />}
+                  />
                   {hasToken ? (
                     <>
                       {userRole === "admin" && (
@@ -96,7 +102,7 @@ const App: React.FC = () => {
             </ApiProvider>
           </Box>
           {/* <ToggleDarkModeButton /> */}
-          <Box mt={5} >
+          <Box mt={5}>
             <Footer />
           </Box>
         </Box>

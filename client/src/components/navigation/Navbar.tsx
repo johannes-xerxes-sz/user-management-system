@@ -1,8 +1,22 @@
 import { useState, MouseEvent, useEffect } from "react";
-import { AppBar, Box, Toolbar, IconButton, Typography, Menu, MenuItem, Container, Avatar, Button, Tooltip, Link } from "@mui/material";
+import {
+  AppBar,
+  Box,
+  Toolbar,
+  IconButton,
+  Typography,
+  Menu,
+  MenuItem,
+  Container,
+  Avatar,
+  Button,
+  Tooltip,
+  Link,
+} from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
 import SupervisedUserCircleIcon from "@mui/icons-material/SupervisedUserCircle";
 import { toast } from "react-toastify";
+import { useLogoutQuery } from "../../features/apiSlice";
 
 const hasToken = localStorage.getItem("token");
 
@@ -11,12 +25,15 @@ const pages = [
   { label: hasToken ? "" : "Login", path: hasToken ? "/" : "/login" },
 ];
 
-const settings: string[] = ["Dashboard", "Logout"];
+const settings: string[] = ["Dashboard", "Profile(inc)", "Logout"];
 
 function ResponsiveAppBar() {
   const [anchorElNav, setAnchorElNav] = useState<null | HTMLElement>(null);
   const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null);
-  const [hasToken, setHasToken] = useState<boolean>(!!localStorage.getItem("token"));
+  const [hasToken, setHasToken] = useState<boolean>(
+    !!localStorage.getItem("token")
+  );
+  // const [data: logout] = useLogoutQuery();
 
   const handleOpenNavMenu = (event: MouseEvent<HTMLElement>) => {
     setAnchorElNav(event.currentTarget);
@@ -34,7 +51,7 @@ function ResponsiveAppBar() {
     setAnchorElUser(null);
   };
 
-  const handleLogout = () => {
+  const handleLogout = async () => {
     localStorage.removeItem("token");
     localStorage.removeItem("role");
     setHasToken(false);

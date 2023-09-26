@@ -80,6 +80,7 @@ export const {
   useGetAllUsersQuery,
   useCreateUserMutation,
   useLoginMutation,
+  useLogoutQuery,
   useDeleteAllUsersQuery,
   useGetUserQuery,
   useEditUserMutation,
